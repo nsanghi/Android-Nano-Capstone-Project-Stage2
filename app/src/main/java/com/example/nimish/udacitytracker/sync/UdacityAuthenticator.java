@@ -1,4 +1,4 @@
-package com.example.nimish.udacitytracker.com.example.nimish.udacitytracker.sync;
+package com.example.nimish.udacitytracker.sync;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;

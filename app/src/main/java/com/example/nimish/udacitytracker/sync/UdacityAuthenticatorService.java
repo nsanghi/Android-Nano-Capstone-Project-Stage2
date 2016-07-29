@@ -1,9 +1,8 @@
-package com.example.nimish.udacitytracker.com.example.nimish.udacitytracker.sync;
+package com.example.nimish.udacitytracker.sync;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 /**
  * Created by nimishsanghi on 27/07/16.

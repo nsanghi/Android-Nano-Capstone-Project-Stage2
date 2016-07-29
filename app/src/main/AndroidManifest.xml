@@ -32,7 +32,7 @@
 
 
         <service
-            android:name="com.example.nimish.udacitytracker.sync.UdacityAuthenticatorService">
+            android:name=".sync.UdacityAuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
@@ -43,7 +43,7 @@
 
         <!-- The SyncAdapter service -->
         <service
-            android:name="com.example.nimish.udacitytracker.sync.UdacitySyncService"
+            android:name=".sync.UdacitySyncService"
             android:exported="true"
             >
             <intent-filter>
