@@ -14,7 +14,7 @@ public class UdacitySyncService extends Service {
 
     @Override
     public void onCreate() {
-        Log.d("SunshineSyncService", "onCreate - SunshineSyncService");
+        Log.d("SunshineSyncService", "onCreate - UdacitySyncService");
         synchronized (sSyncAdapterLock) {
             if (sUdacitySyncAdapter == null) {
                 sUdacitySyncAdapter = new UdacitySyncAdapter(getApplicationContext(), true);

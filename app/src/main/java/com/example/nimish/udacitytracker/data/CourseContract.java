@@ -30,7 +30,7 @@ public class CourseContract {
         expected_duration, expected_duration_unit, new_release
          */
 
-        public static final String COLUMN_COURSE_CODE = "key";
+        public static final String COLUMN_COURSE_CODE = "course_code";
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_HOMEPAGE = "homepage";
         public static final String COLUMN_SUBTITLE = "subtitle";
@@ -45,14 +45,20 @@ public class CourseContract {
         public static final String COLUMN_EXPECTED_DURATION = "expected_duration";
         public static final String COLUMN_EXPECTED_DURATION_UNIT = "expected_duration_unit";
         public static final String COLUMN_NEW_RELEASE = "new_release";
+        public static final String COLUMN_FAVORITE = "favorite";
 
         public static Uri buildCourseUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static long getCourseCodeFromUri(Uri uri) {
-            return Long.valueOf(uri.getPathSegments().get(1));  // 0 will be "course" table name
-                                                                // 1 will be _ID of course
+        public static Uri favoriteCoursesUri() {
+            return CONTENT_URI.buildUpon().appendPath(COLUMN_FAVORITE).build();
+        }
+
+        public static String getCourseCodeFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);  // 0 will be "course" table name
+                                                                // 1 will be "course_code"
+                                                                // 2 will be the actual course code
         }
 
         public static Uri buildCourseUriFromCourseCode(String courseCode) {
