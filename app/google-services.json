@@ -1,0 +1,104 @@
+{
+  "project_info": {
+    "project_number": "73524782335",
+    "firebase_url": "https://udacitycapstone-d37c7.firebaseio.com",
+    "project_id": "udacitycapstone-d37c7",
+    "storage_bucket": "udacitycapstone-d37c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73524782335:android:14813521f0e0cd62",
+        "android_client_info": {
+          "package_name": "com.example.nimish.udacitytracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73524782335-o9drqm10hpd3qaqp51ffbu3isk6rtnr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8I3Gv-oDsRQbnwMjmqf0Qw9GwxAi33fg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73524782335:android:d705684fe668c33c",
+        "android_client_info": {
+          "package_name": "com.example.nimish.udacitytracker.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73524782335-o9drqm10hpd3qaqp51ffbu3isk6rtnr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8I3Gv-oDsRQbnwMjmqf0Qw9GwxAi33fg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73524782335:android:58209d0b4a253738",
+        "android_client_info": {
+          "package_name": "com.example.nimish.udacitytracker.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73524782335-o9drqm10hpd3qaqp51ffbu3isk6rtnr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8I3Gv-oDsRQbnwMjmqf0Qw9GwxAi33fg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
  * Created by nimishsanghi on 28/07/16.
  */
 public class CourseContract {
-    public static final String CONTENT_AUTHORITY = "com.example.nimish.udacitytracker.provider";
+    public static final String CONTENT_AUTHORITY = "com.example.nimish.udacitytracker.paid.provider";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_COURSE = "course";
 
