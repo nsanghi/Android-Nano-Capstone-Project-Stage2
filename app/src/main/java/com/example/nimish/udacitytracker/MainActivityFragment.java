@@ -33,25 +33,49 @@ public class MainActivityFragment extends Fragment implements LoaderManager
 
     static final int COL_COURSE_ID = 0;
     static final int COL_COURSE_CODE = 1;
-    static final int COL_COURSE_IMAGE = 2;
-    static final int COL_COURSE_TITLE = 3;
-    static final int COL_COURSE_SHORT_SUMMARY = 4;
+    static final int COL_COURSE_TITLE = 2;
+    static final int COL_COURSE_HOMEPAGE = 3;
+    static final int COL_COURSE_SUBTITLE = 4;
     static final int COL_COURSE_LEVEL = 5;
-    static final int COL_COURSE_NEW_RELESE = 6;
+    static final int COL_COURSE_IMAGE = 6;
+    static final int COL_COURSE_BANNER_IMAGE = 7;
+    static final int COL_COURSE_TEASER_VIDEO = 8;
+    static final int COL_COURSE_SUMMARY = 9;
+    static final int COL_COURSE_SHORT_SUMMARY = 10;
+    static final int COL_COURSE_REQUIRED_KNOWLEDGE = 11;
+    static final int COL_COURSE_EXPECTED_LEARING = 12;
+    static final int COL_COURSE_EXPECTED_DURATION = 13;
+    static final int COL_COURSE_EXPECTED_DURATION_UNIT = 14;
+    static final int COL_COURSE_NEW_RELEASE = 15;
+    static final int COL_COURSE_FAVORITE = 16;
+
+    private static final String[] COURSE_COLUMNS = {
+            CourseContract.CourseEntry._ID,
+            CourseContract.CourseEntry.COLUMN_COURSE_CODE,
+            CourseContract.CourseEntry.COLUMN_TITLE,
+            CourseContract.CourseEntry.COLUMN_HOMEPAGE,
+            CourseContract.CourseEntry.COLUMN_SUBTITLE,
+            CourseContract.CourseEntry.COLUMN_LEVEL,
+            CourseContract.CourseEntry.COLUMN_IMAGE,
+            CourseContract.CourseEntry.COLUMN_BANNER_IMAGE,
+            CourseContract.CourseEntry.COLUMN_TEASER_VIDEO,
+            CourseContract.CourseEntry.COLUMN_SUMMARY,
+            CourseContract.CourseEntry.COLUMN_SHORT_SUMMARY,
+            CourseContract.CourseEntry.COLUMN_REQUIRED_KNOWLEDGE,
+            CourseContract.CourseEntry.COLUMN_EXPECTED_LEARING,
+            CourseContract.CourseEntry.COLUMN_EXPECTED_DURATION,
+            CourseContract.CourseEntry.COLUMN_EXPECTED_DURATION_UNIT,
+            CourseContract.CourseEntry.COLUMN_NEW_RELEASE,
+            CourseContract.CourseEntry.COLUMN_FAVORITE
+    };
+
+
     private static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     private static final int COURSE_LOADER = 0;
     private static final int COURSE_LOADER_FAVORITE = 1;
     private static final int COURSE_LOADER_SEARCH = 2;
-    private static final String[] COURSE_COLUMNS = {
-            CourseContract.CourseEntry._ID,
-            CourseContract.CourseEntry.COLUMN_COURSE_CODE,
-            CourseContract.CourseEntry.COLUMN_IMAGE,
-            CourseContract.CourseEntry.COLUMN_TITLE,
-            CourseContract.CourseEntry.COLUMN_SHORT_SUMMARY,
-            CourseContract.CourseEntry.COLUMN_LEVEL,
-            CourseContract.CourseEntry.COLUMN_NEW_RELEASE
-    };
+
     private CourseAdapter mCourseAdapter;
     private RecyclerView mRecyclerView;
     private int mPosition = RecyclerView.NO_POSITION;
@@ -71,19 +95,26 @@ public class MainActivityFragment extends Fragment implements LoaderManager
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mCourseAdapter = new CourseAdapter(getActivity());
+//        mCourseAdapter = new CourseAdapter(getActivity(), ((MainActivity)getActivity()).getPaneMode());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_course);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-        mRecyclerView.setAdapter(mCourseAdapter);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+//        mRecyclerView.setAdapter(mCourseAdapter);
 
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+        mCourseAdapter = new CourseAdapter(getActivity(), ((MainActivity)getActivity()).getPaneMode());
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
+        mRecyclerView.setAdapter(mCourseAdapter);
+
         getLoaderManager().initLoader(COURSE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
@@ -98,7 +129,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(this);
 
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat
+                .OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 getLoaderManager().restartLoader(COURSE_LOADER, null, MainActivityFragment.this);
@@ -158,9 +190,10 @@ public class MainActivityFragment extends Fragment implements LoaderManager
                 String selection =
                         CourseContract.CourseEntry.TABLE_NAME + "." +
                                 CourseContract.CourseEntry.COLUMN_TITLE + " LIKE ?";
-                String[] selectionArgs = new String[]{"%"+ args.getString("query")+ "%" };
+                String[] selectionArgs = new String[]{"%" + args.getString("query") + "%"};
                 courseUri = CourseContract.CourseEntry.CONTENT_URI;
-                return new CursorLoader(getActivity(), courseUri, COURSE_COLUMNS, selection, selectionArgs, null);
+                return new CursorLoader(getActivity(), courseUri, COURSE_COLUMNS, selection,
+                        selectionArgs, null);
 
             }
 
@@ -174,7 +207,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager
     @Override
     public boolean onQueryTextSubmit(String query) {
 
-        Log.d(LOG_TAG, "queryText:"+query);
+        Log.d(LOG_TAG, "queryText:" + query);
         Bundle args = new Bundle();
         args.putCharSequence("query", query);
         getLoaderManager().restartLoader(COURSE_LOADER_SEARCH, args, this);
@@ -183,7 +216,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.d(LOG_TAG, "queryText:"+newText);
+        Log.d(LOG_TAG, "queryText:" + newText);
         Bundle args = new Bundle();
         args.putCharSequence("query", newText);
         getLoaderManager().restartLoader(COURSE_LOADER_SEARCH, args, this);
@@ -203,6 +236,36 @@ public class MainActivityFragment extends Fragment implements LoaderManager
 
     }
 
+    private void updateEmptyView() {
+        TextView tv = (TextView) getView().findViewById(R.id.recyclerview_course_empty);
+        if (mCourseAdapter.getItemCount() == 0) {
+            if (null != tv) {
+                // if cursor is empty, why?
+                int message = R.string.empty_course_list;
+                @UdacitySyncAdapter.CourseServerStatus int status = Utility.getServerStatus
+                        (getActivity());
+                switch (status) {
+                    case UdacitySyncAdapter.COURSE_SERVER_DOWN:
+                        message = R.string.empty_course_list_server_down;
+                        break;
+                    case UdacitySyncAdapter.COURSE_SERVER_INVALID:
+                        message = R.string.empty_course_list_server_error;
+                        break;
+                    default:
+                        if (!Utility.isNetworkAvailable(getActivity())) {
+                            message = R.string.empty_course_list_no_network;
+                        }
+                }
+                tv.setText(message);
+            }
+        } else {
+            if (null != tv) {
+                tv.setText("");
+            }
+
+        }
+    }
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -216,32 +279,4 @@ public class MainActivityFragment extends Fragment implements LoaderManager
     }
 
 
-    private void updateEmptyView() {
-        TextView tv = (TextView) getView().findViewById(R.id.recyclerview_course_empty);
-        if ( mCourseAdapter.getItemCount() == 0 ) {
-            if ( null != tv ) {
-                // if cursor is empty, why?
-                int message = R.string.empty_course_list;
-                @UdacitySyncAdapter.CourseServerStatus int status = Utility.getServerStatus(getActivity());
-                switch (status) {
-                    case UdacitySyncAdapter.COURSE_SERVER_DOWN:
-                        message = R.string.empty_course_list_server_down;
-                        break;
-                    case UdacitySyncAdapter.COURSE_SERVER_INVALID:
-                        message = R.string.empty_course_list_server_error;
-                        break;
-                    default:
-                        if (!Utility.isNetworkAvailable(getActivity()) ) {
-                            message = R.string.empty_course_list_no_network;
-                        }
-                }
-                tv.setText(message);
-            }
-        } else {
-            if(null != tv) {
-                tv.setText("");
-            }
-
-        }
-    }
 }

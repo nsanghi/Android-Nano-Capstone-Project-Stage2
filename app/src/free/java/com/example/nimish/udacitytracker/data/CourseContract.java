@@ -30,7 +30,7 @@ public class CourseContract {
         expected_duration, expected_duration_unit, new_release
          */
 
-        public static final String COLUMN_COURSE_CODE = "course_code";
+        public static final String COLUMN_COURSE_CODE = "course_code"; //JSON key is "key"
         public static final String COLUMN_TITLE = "title";
         public static final String COLUMN_HOMEPAGE = "homepage";
         public static final String COLUMN_SUBTITLE = "subtitle";

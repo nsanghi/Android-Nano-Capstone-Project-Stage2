@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="@dimen/item_margin"
+              android:layout_marginBottom="@dimen/item_margin"
               android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -47,7 +48,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="Advanced"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorAccent"
@@ -82,6 +83,6 @@
         android:text="In this program, you\u2019ll learn the skills and techniques used by self-driving car teams at the most advanced technology companies in the world."
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-/>
+    />
 
 </LinearLayout>

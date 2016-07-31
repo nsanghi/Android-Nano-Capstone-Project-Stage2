@@ -8,6 +8,7 @@
                                                  tools:context="com.example.nimish.udacitytracker.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -22,19 +23,30 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <include layout="@layout/content_main"/>
+        <include layout="@layout/course_list"/>
+    </FrameLayout>
+
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center|bottom"
         app:adSize="BANNER"
         app:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
 
 </android.support.design.widget.CoordinatorLayout>
+
+
+
+
