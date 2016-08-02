@@ -5,8 +5,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.nimish.udacitytracker.sync.UdacitySyncAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    private static  final String LOG_TAG = MainActivity.class.getSimpleName();
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -21,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         if (findViewById(R.id.course_detail_container) != null) {
             // The detail container view will be present only in the
@@ -35,10 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         UdacitySyncAdapter.initializeSyncAdapter(this);
+
+
     }
-
-
-}
 
     public boolean getPaneMode() {
         return this.mTwoPane;

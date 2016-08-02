@@ -1,18 +1,30 @@
 package com.example.nimish.udacitytracker;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.nimish.udacitytracker.data.Course;
+import com.example.nimish.udacitytracker.data.CourseContract;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 /**
  * An activity representing a single Course detail screen. This
@@ -23,22 +35,54 @@ import com.example.nimish.udacitytracker.data.Course;
 public class CourseDetailActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = CourseDetailActivity.class.getSimpleName();
+    FloatingActionButton mFab;
+    Course mCourse;
+    private static final int FAVORITE = 1;
+    private static final int NOT_FAVORITE = 0;
+
+    private static final int COURSE_UPDATE = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCourse = getIntent().getParcelableExtra(CourseDetailFragment.ARG_COURSE);
+        Log.d(LOG_TAG, "course:"+mCourse);
         setContentView(R.layout.activity_course_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+
+        if (mCourse!=null) {
+            setFabColor(mCourse.getFavorite());
+        } else {
+            setFabColor(NOT_FAVORITE);
+        }
+
+
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "ToDO: Make it favorite", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+
+                String where =
+                        CourseContract.CourseEntry.TABLE_NAME + "." +
+                                CourseContract.CourseEntry._ID + " = ?";
+                String[] selectionArgs = new String[]{Long.toString(mCourse.getId())};
+                Uri courseUri = CourseContract.CourseEntry.CONTENT_URI;
+                ContentValues values = new ContentValues();
+                values.put(CourseContract.CourseEntry.COLUMN_FAVORITE, 1-mCourse.getFavorite());
+                int rowsUpdated = getContentResolver().update(courseUri, values, where, selectionArgs);
+                if (rowsUpdated > 0) {
+                    mCourse.setFavorite(1-mCourse.getFavorite());
+                    setFabColor(mCourse.getFavorite());
+                }
+                //Snackbar.make(view, "Old value:" + mCourse.getFavorite() + ", rows Updated="+rowsUpdated, Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
             }
         });
+
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -58,8 +102,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Course course = getIntent().getParcelableExtra(CourseDetailFragment.ARG_COURSE);
-            Log.d(LOG_TAG, "course:"+course);
+
             Bundle arguments = new Bundle();
             arguments.putParcelable(CourseDetailFragment.ARG_COURSE,
                     getIntent().getParcelableExtra(CourseDetailFragment.ARG_COURSE));
@@ -87,4 +130,14 @@ public class CourseDetailActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void setFabColor(int favorite) {
+        if (favorite == FAVORITE) {
+            mFab.setColorFilter(ContextCompat.getColor(this, R.color.pink));
+        } else {
+            mFab.setColorFilter(ContextCompat.getColor(this, R.color.white));
+        }
+
+    }
+
 }
