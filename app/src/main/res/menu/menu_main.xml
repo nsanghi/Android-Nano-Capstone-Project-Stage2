@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.nimish.udacitytracker.MainActivity">
 
-    <item android:id="@+id/search"
-          android:title="@string/search_hint"
-          android:icon="@android:drawable/ic_menu_search"
-          app:showAsAction="collapseActionView|ifRoom"
-          app:actionViewClass="android.support.v7.widget.SearchView" />
+    <item
+        android:id="@+id/search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/search_hint"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
     <item
         android:id="@+id/action_favorite"
         android:orderInCategory="100"

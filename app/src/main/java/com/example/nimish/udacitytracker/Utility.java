@@ -17,7 +17,7 @@ public class Utility {
 
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =
-                (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null &&
@@ -25,10 +25,12 @@ public class Utility {
     }
 
     @SuppressWarnings("ResourceType")
-    static public @UdacitySyncAdapter.CourseServerStatus
-    int getServerStatus(Context c){
+    static public
+    @UdacitySyncAdapter.CourseServerStatus
+    int getServerStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        return sp.getInt(c.getString(R.string.pref_server_status_key), UdacitySyncAdapter.COURSE_SERVER_OK);
+        return sp.getInt(c.getString(R.string.pref_server_status_key), UdacitySyncAdapter
+                .COURSE_SERVER_OK);
     }
 
     static public CharSequence formatText(String input) {

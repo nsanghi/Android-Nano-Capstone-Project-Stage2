@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.example.nimish.udacitytracker.CourseDetailsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.nimish.udacitytracker.CourseDetailsActivity">
     <item
         android:id="@+id/action_reminder"
         android:orderInCategory="100"
         android:title="@string/action_reminder"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 </menu>

@@ -31,25 +31,25 @@ public class MainActivityFragment extends Fragment implements LoaderManager
         .LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
 
 
-    static final int COL_COURSE_ID = 0;
-    static final int COL_COURSE_CODE = 1;
-    static final int COL_COURSE_TITLE = 2;
-    static final int COL_COURSE_HOMEPAGE = 3;
-    static final int COL_COURSE_SUBTITLE = 4;
-    static final int COL_COURSE_LEVEL = 5;
-    static final int COL_COURSE_IMAGE = 6;
-    static final int COL_COURSE_BANNER_IMAGE = 7;
-    static final int COL_COURSE_TEASER_VIDEO = 8;
-    static final int COL_COURSE_SUMMARY = 9;
-    static final int COL_COURSE_SHORT_SUMMARY = 10;
-    static final int COL_COURSE_REQUIRED_KNOWLEDGE = 11;
-    static final int COL_COURSE_EXPECTED_LEARING = 12;
-    static final int COL_COURSE_EXPECTED_DURATION = 13;
-    static final int COL_COURSE_EXPECTED_DURATION_UNIT = 14;
-    static final int COL_COURSE_NEW_RELEASE = 15;
-    static final int COL_COURSE_FAVORITE = 16;
+    public static final int COL_COURSE_ID = 0;
+    public static final int COL_COURSE_CODE = 1;
+    public static final int COL_COURSE_TITLE = 2;
+    public static final int COL_COURSE_HOMEPAGE = 3;
+    public static final int COL_COURSE_SUBTITLE = 4;
+    public static final int COL_COURSE_LEVEL = 5;
+    public static final int COL_COURSE_IMAGE = 6;
+    public static final int COL_COURSE_BANNER_IMAGE = 7;
+    public static final int COL_COURSE_TEASER_VIDEO = 8;
+    public static final int COL_COURSE_SUMMARY = 9;
+    public static final int COL_COURSE_SHORT_SUMMARY = 10;
+    public static final int COL_COURSE_REQUIRED_KNOWLEDGE = 11;
+    public static final int COL_COURSE_EXPECTED_LEARING = 12;
+    public static final int COL_COURSE_EXPECTED_DURATION = 13;
+    public static final int COL_COURSE_EXPECTED_DURATION_UNIT = 14;
+    public static final int COL_COURSE_NEW_RELEASE = 15;
+    public static final int COL_COURSE_FAVORITE = 16;
 
-    private static final String[] COURSE_COLUMNS = {
+    public static final String[] COURSE_COLUMNS = {
             CourseContract.CourseEntry._ID,
             CourseContract.CourseEntry.COLUMN_COURSE_CODE,
             CourseContract.CourseEntry.COLUMN_TITLE,
@@ -89,27 +89,23 @@ public class MainActivityFragment extends Fragment implements LoaderManager
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//        mCourseAdapter = new CourseAdapter(getActivity(), ((MainActivity)getActivity()).getPaneMode());
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_course);
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-//        mRecyclerView.setAdapter(mCourseAdapter);
-
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
-        mCourseAdapter = new CourseAdapter(getActivity(), ((MainActivity)getActivity()).getPaneMode());
+        mCourseAdapter = new CourseAdapter(getActivity(), ((MainActivity) getActivity())
+                .getPaneMode());
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
@@ -265,18 +261,5 @@ public class MainActivityFragment extends Fragment implements LoaderManager
 
         }
     }
-
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callback {
-        /**
-         * DetailFragmentCallback for when an item has been selected.
-         */
-        public void onItemSelected(Uri dateUri);
-    }
-
 
 }

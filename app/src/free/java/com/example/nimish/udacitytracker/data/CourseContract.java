@@ -9,7 +9,8 @@ import android.provider.BaseColumns;
  * Created by nimishsanghi on 28/07/16.
  */
 public class CourseContract {
-    public static final String CONTENT_AUTHORITY = "com.example.nimish.udacitytracker.free.provider";
+    public static final String CONTENT_AUTHORITY = "com.example.nimish.udacitytracker.free" +
+            ".provider";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_COURSE = "course";
 
@@ -26,7 +27,8 @@ public class CourseContract {
         public static final String TABLE_NAME = "course";
 
         /*
-        key, title, homepage, subtitle, level, image, banner_image, teaser_video, summary, short_summary, required_knowledge, expected_learning,
+        key, title, homepage, subtitle, level, image, banner_image, teaser_video, summary,
+        short_summary, required_knowledge, expected_learning,
         expected_duration, expected_duration_unit, new_release
          */
 
@@ -57,8 +59,8 @@ public class CourseContract {
 
         public static String getCourseCodeFromUri(Uri uri) {
             return uri.getPathSegments().get(2);  // 0 will be "course" table name
-                                                                // 1 will be "course_code"
-                                                                // 2 will be the actual course code
+            // 1 will be "course_code"
+            // 2 will be the actual course code
         }
 
         public static Uri buildCourseUriFromCourseCode(String courseCode) {

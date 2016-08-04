@@ -88,10 +88,10 @@ public class CourseProvider extends ContentProvider {
 
         Cursor retCursor;
         Log.d(LOG_TAG, "query uri called: " + uri);
-        Log.d(LOG_TAG, "selection is: "+selection);
-        Log.d(LOG_TAG, "slectionArgs: " +Arrays.toString(selectionArgs));
+        Log.d(LOG_TAG, "selection is: " + selection);
+        Log.d(LOG_TAG, "slectionArgs: " + Arrays.toString(selectionArgs));
 
-        switch(sUriMatcher.match(uri)) {
+        switch (sUriMatcher.match(uri)) {
             //"course"
             case COURSE: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
@@ -176,7 +176,7 @@ public class CourseProvider extends ContentProvider {
         Uri returnUri;
         Log.d(LOG_TAG, "insert uri called: " + uri);
         switch (match) {
-            case COURSE : {
+            case COURSE: {
                 long _id = db.insert(CourseContract.CourseEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = CourseContract.CourseEntry.buildCourseUri(_id);
@@ -198,10 +198,10 @@ public class CourseProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
 
-        if (null == selection) selection="1";
+        if (null == selection) selection = "1";
 
         switch (match) {
-            case COURSE :
+            case COURSE:
                 rowsDeleted =
                         db.delete(CourseContract.CourseEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -212,7 +212,7 @@ public class CourseProvider extends ContentProvider {
 //        if (rowsDeleted != 0) {
 //            getContext().getContentResolver().notifyChange(uri, null);
 //        }
-        return  rowsDeleted;
+        return rowsDeleted;
     }
 
     @Override
@@ -222,12 +222,13 @@ public class CourseProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int rowsUpdated;
 
-        if (null == selection) selection="1";
+        if (null == selection) selection = "1";
 
         switch (match) {
-            case COURSE :
+            case COURSE:
                 rowsUpdated =
-                        db.update(CourseContract.CourseEntry.TABLE_NAME, values, selection, selectionArgs);
+                        db.update(CourseContract.CourseEntry.TABLE_NAME, values, selection,
+                                selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -236,6 +237,6 @@ public class CourseProvider extends ContentProvider {
 //        if (rowsUpdated != 0) {
 //            getContext().getContentResolver().notifyChange(uri, null);
 //        }
-        return  rowsUpdated;
+        return rowsUpdated;
     }
 }

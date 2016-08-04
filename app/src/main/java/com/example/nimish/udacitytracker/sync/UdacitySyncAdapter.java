@@ -54,7 +54,6 @@ public class UdacitySyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int COURSE_SERVER_DOWN = 1;
     public static final int COURSE_SERVER_INVALID = 2;
     public static final String LOG_TAG = UdacitySyncAdapter.class.getSimpleName();
-    //private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final String[] NOTIFY_COURSE_PROJECTION = new String[]{
             CourseContract.CourseEntry.COLUMN_COURSE_CODE,
             CourseContract.CourseEntry.COLUMN_TITLE,

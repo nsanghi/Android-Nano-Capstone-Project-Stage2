@@ -25,6 +25,7 @@ import com.example.nimish.udacitytracker.data.CourseContract;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * An activity representing a single Course detail screen. This
@@ -39,22 +40,24 @@ public class CourseDetailActivity extends AppCompatActivity {
     Course mCourse;
     private static final int FAVORITE = 1;
     private static final int NOT_FAVORITE = 0;
-
-    private static final int COURSE_UPDATE = 0;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // FOr Google Analytics - initialize
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         mCourse = getIntent().getParcelableExtra(CourseDetailFragment.ARG_COURSE);
-        Log.d(LOG_TAG, "course:"+mCourse);
+        Log.d(LOG_TAG, "course:" + mCourse);
         setContentView(R.layout.activity_course_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
-        if (mCourse!=null) {
+        if (mCourse != null) {
             setFabColor(mCourse.getFavorite());
         } else {
             setFabColor(NOT_FAVORITE);
@@ -72,14 +75,19 @@ public class CourseDetailActivity extends AppCompatActivity {
                 String[] selectionArgs = new String[]{Long.toString(mCourse.getId())};
                 Uri courseUri = CourseContract.CourseEntry.CONTENT_URI;
                 ContentValues values = new ContentValues();
-                values.put(CourseContract.CourseEntry.COLUMN_FAVORITE, 1-mCourse.getFavorite());
-                int rowsUpdated = getContentResolver().update(courseUri, values, where, selectionArgs);
+                values.put(CourseContract.CourseEntry.COLUMN_FAVORITE, 1 - mCourse.getFavorite());
+                int rowsUpdated = getContentResolver().update(courseUri, values, where,
+                        selectionArgs);
                 if (rowsUpdated > 0) {
-                    mCourse.setFavorite(1-mCourse.getFavorite());
+                    mCourse.setFavorite(1 - mCourse.getFavorite());
                     setFabColor(mCourse.getFavorite());
                 }
-                //Snackbar.make(view, "Old value:" + mCourse.getFavorite() + ", rows Updated="+rowsUpdated, Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mCourse.getCourseCode());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mCourse.getTitle());
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "course");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_WISHLIST, bundle);
             }
         });
 
@@ -89,6 +97,7 @@ public class CourseDetailActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

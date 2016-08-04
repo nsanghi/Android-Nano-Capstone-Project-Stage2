@@ -2,17 +2,11 @@ package com.example.nimish.udacitytracker;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +19,7 @@ import com.example.nimish.udacitytracker.data.CourseContract;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * An activity representing a single Course detail screen. This
@@ -39,22 +34,24 @@ public class CourseDetailActivity extends AppCompatActivity {
     Course mCourse;
     private static final int FAVORITE = 1;
     private static final int NOT_FAVORITE = 0;
-
-    private static final int COURSE_UPDATE = 0;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // FOr Google Analytics - initialize
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         mCourse = getIntent().getParcelableExtra(CourseDetailFragment.ARG_COURSE);
-        Log.d(LOG_TAG, "course:"+mCourse);
-       setContentView(R.layout.activity_course_detail);
+        Log.d(LOG_TAG, "course:" + mCourse);
+        setContentView(R.layout.activity_course_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
-        if (mCourse!=null) {
+        if (mCourse != null) {
             setFabColor(mCourse.getFavorite());
         } else {
             setFabColor(NOT_FAVORITE);
@@ -72,20 +69,25 @@ public class CourseDetailActivity extends AppCompatActivity {
                 String[] selectionArgs = new String[]{Long.toString(mCourse.getId())};
                 Uri courseUri = CourseContract.CourseEntry.CONTENT_URI;
                 ContentValues values = new ContentValues();
-                values.put(CourseContract.CourseEntry.COLUMN_FAVORITE, 1-mCourse.getFavorite());
-                int rowsUpdated = getContentResolver().update(courseUri, values, where, selectionArgs);
+                values.put(CourseContract.CourseEntry.COLUMN_FAVORITE, 1 - mCourse.getFavorite());
+                int rowsUpdated = getContentResolver().update(courseUri, values, where,
+                        selectionArgs);
                 if (rowsUpdated > 0) {
-                    mCourse.setFavorite(1-mCourse.getFavorite());
+                    mCourse.setFavorite(1 - mCourse.getFavorite());
                     setFabColor(mCourse.getFavorite());
                 }
-                //Snackbar.make(view, "Old value:" + mCourse.getFavorite() + ", rows Updated="+rowsUpdated, Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mCourse.getCourseCode());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mCourse.getTitle());
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "course");
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_WISHLIST, bundle);
             }
         });
 
 
         //For mobile adds in free version
-        MobileAds.initialize(this,getString(R.string.banner_ad_unit_id));
+        MobileAds.initialize(this, getString(R.string.banner_ad_unit_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -106,9 +108,6 @@ public class CourseDetailActivity extends AppCompatActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-
             Bundle arguments = new Bundle();
             arguments.putParcelable(CourseDetailFragment.ARG_COURSE,
                     getIntent().getParcelableExtra(CourseDetailFragment.ARG_COURSE));

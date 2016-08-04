@@ -15,5 +15,13 @@
     <dimen name="detail_backdrop_height">256dp</dimen>
     <dimen name="card_margin">16dp</dimen>
 
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_list_item_height">46dp</dimen>
+    <dimen name="widget_font_size">16sp</dimen>
+
+    <integer name="anim_duration_very_long">1500</integer>
+    <integer name="anim_duration_long">500</integer>
+    <integer name="anim_duration_medium">300</integer>
+
 
 </resources>

@@ -42,7 +42,7 @@ public class CourseDbHelper extends SQLiteOpenHelper {
                 CourseEntry.COLUMN_EXPECTED_DURATION_UNIT + " TEXT NOT NULL, " +
                 CourseEntry.COLUMN_NEW_RELEASE + " TEXT NOT NULL, " +
                 CourseEntry.COLUMN_FAVORITE + " BOOLEAN NOT NULL CHECK (" +
-                        CourseEntry.COLUMN_FAVORITE + " IN (0,1))" +
+                CourseEntry.COLUMN_FAVORITE + " IN (0,1))" +
                 " );";
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);

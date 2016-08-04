@@ -26,10 +26,12 @@ public class Course implements Parcelable {
     private String newRelease;
     private int favorite;
 
-    public Course(long _id, String courseCode, String title, String homepage, String subtitle, String
+    public Course(long _id, String courseCode, String title, String homepage, String subtitle,
+                  String
             level, String image, String bannerImage, String teaserVideo, String summary, String
                           shortSummary, String requiredKnowledge, String expectedLearning, String
-                          expectedDuration, String expectedDurationUnit, String newRelease, int favorite) {
+                          expectedDuration, String expectedDurationUnit, String newRelease, int
+                          favorite) {
         this._id = _id;
         this.courseCode = courseCode;
         this.title = title;
@@ -49,9 +51,13 @@ public class Course implements Parcelable {
         this.favorite = favorite;
     }
 
-    public long getId() { return _id; }
+    public long getId() {
+        return _id;
+    }
 
-    public void setId(long _id) { this._id = _id; }
+    public void setId(long _id) {
+        this._id = _id;
+    }
 
     public String getCourseCode() {
         return courseCode;
@@ -204,7 +210,7 @@ public class Course implements Parcelable {
                 '}';
     }
 
-    private  Course(Parcel in) {
+    private Course(Parcel in) {
         this._id = in.readLong();
         this.courseCode = in.readString();
         this.title = in.readString();

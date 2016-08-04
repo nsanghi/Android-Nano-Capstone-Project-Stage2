@@ -33,12 +33,17 @@
 
     <string name="youtube_link">Watch Trailer</string>
     <string name="course_url">Open in Browser</string>
-    
+
     <!-- Calendar intent related -->
     <string name="event_title">Udacity Reminder</string>
     <string name="event_description">Course Name</string>
     <string name="event_location">Web</string>
 
+    <string name="empty_view_text">This is the empty view</string>
+
+    <string name="course_image_description">Course Image</string>
+
+    <string name="transition_name_image">transition:IMAGE</string>
 
 
 </resources>

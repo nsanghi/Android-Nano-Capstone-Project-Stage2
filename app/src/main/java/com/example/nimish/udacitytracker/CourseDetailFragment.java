@@ -1,6 +1,7 @@
 package com.example.nimish.udacitytracker;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -8,9 +9,9 @@ import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.ShareActionProvider;
+import android.support.v4.content.ContextCompat;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nimish.udacitytracker.data.Course;
+import com.example.nimish.udacitytracker.data.CourseContract;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -47,6 +50,11 @@ public class CourseDetailFragment extends Fragment {
     private Course mCourse;
     private ImageView mBackdropImageView;
     private CollapsingToolbarLayout mAppBarLayout;
+    private FloatingActionButton mFab;
+    private static final int FAVORITE = 1;
+    private static final int NOT_FAVORITE = 0;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,15 +68,16 @@ public class CourseDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_COURSE)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
             mCourse = getArguments().getParcelable(ARG_COURSE);
 
 
         }
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
+        // FOr Google Analytics - initialize
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+
 
     }
 
@@ -96,13 +105,14 @@ public class CourseDetailFragment extends Fragment {
         subTitleTextView.setText(mCourse.getSubtitle());
 
         TextView durationTextView = (TextView) rootView.findViewById(R.id.expected_duration);
-        durationTextView.setText(mCourse.getExpectedDuration()+" " + mCourse.getExpectedDurationUnit());
+        durationTextView.setText(mCourse.getExpectedDuration() + " " + mCourse
+                .getExpectedDurationUnit());
 
 
         String level = mCourse.getLevel();
-        if (level.length()>0) {
+        if (level.length() > 0) {
 
-            level = level.substring(0,1).toUpperCase() + level.substring(1);
+            level = level.substring(0, 1).toUpperCase() + level.substring(1);
             //level = level.toUpperCase();
         }
         TextView levelTextVIew = (TextView) rootView.findViewById(R.id.level);
@@ -115,7 +125,8 @@ public class CourseDetailFragment extends Fragment {
         summaryTextView.setText(Utility.formatText(mCourse.getSummary()));
         summaryTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        TextView expectedLearningTextView = (TextView) rootView.findViewById(R.id.expected_learning);
+        TextView expectedLearningTextView = (TextView) rootView.findViewById(R.id
+                .expected_learning);
         expectedLearningTextView.setText(Utility.formatText(mCourse.getExpectedLearning()));
         expectedLearningTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -133,9 +144,9 @@ public class CourseDetailFragment extends Fragment {
                     startActivity(intent);
                 }
             });
-            teaserVideoImageBtn.setColorFilter(Color.argb(255,0,0,0));
+            teaserVideoImageBtn.setColorFilter(Color.argb(255, 0, 0, 0));
         } else {
-            teaserVideoImageBtn.setColorFilter(Color.argb(255,220,220,220));
+            teaserVideoImageBtn.setColorFilter(Color.argb(255, 220, 220, 220));
         }
 
 
@@ -149,10 +160,52 @@ public class CourseDetailFragment extends Fragment {
                     startActivity(intent);
                 }
             });
-            homepageImageBtn.setColorFilter(Color.argb(255,0,0,0));
+            homepageImageBtn.setColorFilter(Color.argb(255, 0, 0, 0));
         } else {
-            homepageImageBtn.setColorFilter(Color.argb(255,220,220,220));
+            homepageImageBtn.setColorFilter(Color.argb(255, 220, 220, 220));
         }
+
+
+        mFab = (FloatingActionButton) rootView.findViewById(R.id.fab_fragment);
+
+
+        if (mFab != null) {
+
+            if (mCourse != null) {
+                setFabColor(mCourse.getFavorite());
+            } else {
+                setFabColor(NOT_FAVORITE);
+            }
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    String where =
+                            CourseContract.CourseEntry.TABLE_NAME + "." +
+                                    CourseContract.CourseEntry._ID + " = ?";
+                    String[] selectionArgs = new String[]{Long.toString(mCourse.getId())};
+                    Uri courseUri = CourseContract.CourseEntry.CONTENT_URI;
+                    ContentValues values = new ContentValues();
+                    values.put(CourseContract.CourseEntry.COLUMN_FAVORITE, 1 - mCourse
+                            .getFavorite());
+                    int rowsUpdated = getActivity().getContentResolver().update(courseUri,
+                            values, where, selectionArgs);
+                    if (rowsUpdated > 0) {
+                        mCourse.setFavorite(1 - mCourse.getFavorite());
+                        setFabColor(mCourse.getFavorite());
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mCourse.getCourseCode());
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, mCourse.getTitle());
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "course");
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_TO_WISHLIST, bundle);
+
+                }
+            });
+        }
+
 
         return rootView;
     }
@@ -180,7 +233,7 @@ public class CourseDetailFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-            inflater.inflate(R.menu.menu_course_details, menu);
+        inflater.inflate(R.menu.menu_course_details, menu);
 
     }
 
@@ -195,18 +248,20 @@ public class CourseDetailFragment extends Fragment {
         if (id == R.id.action_reminder) {
 
             Calendar beginTime = Calendar.getInstance();
-            beginTime.add(Calendar.DATE,1);
+            beginTime.add(Calendar.DATE, 1);
             Calendar endTime = Calendar.getInstance();
-            endTime.add(Calendar.DATE,1);
-            endTime.add(Calendar.MINUTE,30);
+            endTime.add(Calendar.DATE, 1);
+            endTime.add(Calendar.MINUTE, 30);
             Intent intent = new Intent(Intent.ACTION_INSERT)
                     .setData(CalendarContract.Events.CONTENT_URI)
                     .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
                     .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
                     .putExtra(CalendarContract.Events.TITLE, getString(R.string.event_title))
                     .putExtra(CalendarContract.Events.DESCRIPTION, mCourse.getTitle())
-                    .putExtra(CalendarContract.Events.EVENT_LOCATION, getString(R.string.event_location))
-                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                    .putExtra(CalendarContract.Events.EVENT_LOCATION, getString(R.string
+                            .event_location))
+                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events
+                            .AVAILABILITY_BUSY);
             startActivity(intent);
 
 
@@ -215,6 +270,14 @@ public class CourseDetailFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setFabColor(int favorite) {
+        if (favorite == FAVORITE) {
+            mFab.setColorFilter(ContextCompat.getColor(getActivity(), R.color.pink));
+        } else {
+            mFab.setColorFilter(ContextCompat.getColor(getActivity(), R.color.white));
+        }
+
+    }
 
 
 }
